@@ -45,7 +45,7 @@ def get_potencia(X):
     # #Averiguo la potencia promedio en dBunidad_señal
     # potencia = 10 * np.log10(np.mean(psd) * sdr.sample_rate)
     
-    #Potencia señal discreta:
+    #Potencia señal discreta relativa normalizada:
     # Px = (1 / N) * Sumatoria(|X(n)|^2);  n in range(0, N)
     
     N = len(X)
