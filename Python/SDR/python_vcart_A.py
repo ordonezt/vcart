@@ -17,6 +17,8 @@ import serial
 from serial.threaded import LineReader, ReaderThread
 import os
 import traceback
+import matplotlib.pyplot as plt
+
 
 borrar_consola = lambda: os.system('clear')
 
@@ -32,10 +34,71 @@ fin_de_trama_izquierdo = False
 fin_de_trama_inferior = False
 fin_de_trama_superior = False
 
+def heatmap(data, ax=None,
+            cbar_kw={}, cbarlabel="", **kwargs):
+    """
+    Create a heatmap from a numpy array and two lists of labels.
+
+    Parameters
+    ----------
+    data
+        A 2D numpy array of shape (N, M).
+    row_labels
+        A list or array of length N with the labels for the rows.
+    col_labels
+        A list or array of length M with the labels for the columns.
+    ax
+        A `matplotlib.axes.Axes` instance to which the heatmap is plotted.  If
+        not provided, use current axes or create a new one.  Optional.
+    cbar_kw
+        A dictionary with arguments to `matplotlib.Figure.colorbar`.  Optional.
+    cbarlabel
+        The label for the colorbar.  Optional.
+    **kwargs
+        All other arguments are forwarded to `imshow`.
+    """
+
+    if not ax:
+        ax = plt.gca()
+
+    # Plot the heatmap
+    im = ax.imshow(data, **kwargs)
+
+    # Create colorbar
+    cbar = ax.figure.colorbar(im, ax=ax, **cbar_kw)
+    cbar.ax.set_ylabel(cbarlabel, rotation=-90, va="bottom")
+
+    # We want to show all ticks...
+    ax.set_xticks(np.arange(data.shape[1]))
+    ax.set_yticks(np.arange(data.shape[0]))
+    # ... and label them with the respective list entries.
+    # ax.set_xticklabels(col_labels)
+    # ax.set_yticklabels(row_labels)
+
+    # Let the horizontal axes labeling appear on top.
+    ax.tick_params(top=True, bottom=False,
+                   labeltop=True, labelbottom=False)
+
+    # Rotate the tick labels and set their alignment.
+    # plt.setp(ax.get_xticklabels(), rotation=-30, ha="right",
+             # rotation_mode="anchor")
+
+    # Turn spines off and create white grid.
+    for edge, spine in ax.spines.items():
+        spine.set_visible(False)
+
+    ax.set_xticks(np.arange(data.shape[1]+1)-.5, minor=True)
+    ax.set_yticks(np.arange(data.shape[0]+1)-.5, minor=True)
+    #ax.grid(which="minor", color="w", linestyle='-', linewidth=3)
+    ax.tick_params(which="minor", bottom=False, left=False)
+
+    return im, cbar
+
+
 def terminar_programa(signal_number=None, frame=None):
     print('\n\nCerrando...')
-    # if sdr.isOpen():
-    #     sdr.close()
+    if sdr.device_opened:
+        sdr.close()
     if hilo_uart.is_alive():
         hilo_uart.close()
     if arduino.isOpen():
@@ -134,17 +197,18 @@ else:
 
 
 #Abro el dongle
-# sdr = RtlSdr()
+sdr = RtlSdr()
 
-# #Lo configuro
-# sdr.sample_rate = 2.048e6 #Hz
-# sdr.center_freq = 433.83e6  #Hz
-# sdr.freq_correction = 60 #ppm
-# sdr.gain = 0.0 #dB
-# sdr.set_agc_mode(False)
+#Lo configuro
+sdr.sample_rate = 2.048e6 #Hz
+sdr.center_freq = 433.83e6  #Hz
+sdr.freq_correction = 60 #ppm
+sdr.gain = 49.6 #dB
+sdr.set_agc_mode(False)
 
-# nfft = 1024
-# n = 256
+nfft = 1024
+n = 256
+
 print('\n')
 with arduino:
     while True:
@@ -183,7 +247,7 @@ with arduino:
             print('--------------------------\n')
             arduino.write(bytes(b'<0>'))
             
-            print('Esperando...', end='')
+            print('Esperando...')
             
             while flag_posicion_cero != True:
                 pass
@@ -208,7 +272,16 @@ with arduino:
             
             
         elif entrada == 3:
-            borrar_consola()
+            print('\n\nLeer potencia actual')
+            print('--------------------------\n')
+            #Leo las muestras
+            iq = sdr.read_samples(n * nfft)
+            #Calculo la potencia de la señal
+            potencia = get_potencia(iq) - sdr.gain
+            
+            print('Potencia: {:2.2f}dB'. format(potencia))
+            print('Listo\n\n')
+            
         elif entrada == 4:
             #borrar_consola()
             print('\n\nMapear')
@@ -217,12 +290,20 @@ with arduino:
             rango_elevacion = int(input('Ingrese la cantidad de pasos de elevacion: '))
             rango_azimut = int(input('Ingrese la cantidad de pasos de azimut: '))
             
+            mapa_potencia = np.zeros((rango_azimut, rango_elevacion))
+
             for paso_azimut in range(rango_azimut):
                 if paso_azimut % 2 == 0:
                     for paso_elevacion in range(rango_elevacion):
-                        print(paso_azimut, paso_elevacion)
                         #Medir potencia aca y avanzar paso
+                        #Leo las muestras
+                        iq = sdr.read_samples(n * nfft)
+                        #Calculo la potencia de la señal
+                        potencia = get_potencia(iq) - sdr.gain
                         
+                        mapa_potencia[paso_azimut, paso_elevacion] = potencia
+                        
+                        print('Elevacion: {}, Azimut: {}, Potencia: {:2.2f}dB'. format(paso_elevacion, paso_azimut, potencia))
                         
                         arduino.write(b'<U>')
                         
@@ -230,12 +311,18 @@ with arduino:
                             pass
                         flag_paso_realizado = False
                         
-                        print('Paso realizado')
+                        #print('Paso realizado')
                 else:
-                    for paso_elevacion in range(rango_elevacion - 1, 0, -1):
-                        print(paso_azimut, paso_elevacion)
+                    for paso_elevacion in range(rango_elevacion - 1, 0 - 1, -1):
                         #Medir potencia aca y avanzar paso
+                        #Leo las muestras
+                        iq = sdr.read_samples(n * nfft)
+                        #Calculo la potencia de la señal
+                        potencia = get_potencia(iq) - sdr.gain
                         
+                        mapa_potencia[paso_azimut, paso_elevacion] = potencia
+                        
+                        print('Elevacion: {}, Azimut: {}, Potencia: {:2.2f}dB'. format(paso_elevacion, paso_azimut, potencia)) 
                         
                         arduino.write(b'<D>')
                         
@@ -243,7 +330,7 @@ with arduino:
                             pass
                         flag_paso_realizado = False
                         
-                        print('Paso realizado')
+                        #print('Paso realizado')
                 
                 #Me corro hacia izquierda
                 arduino.write(b'<L>')
@@ -254,6 +341,10 @@ with arduino:
                 
                 print('Paso realizado')
             
+            print('Graficando...')
+            im, cbar = heatmap(mapa_potencia)
+            im.figure.savefig('mapa_potencia', format='png')
+            print('Imagen guardada como "mapa_potencia.png"')
             print('Listo\n\n')
 
         elif entrada == 5:
@@ -272,4 +363,4 @@ with arduino:
 
 # #Cierro los dispositivos
 # arduino.close()
-#sdr.close()
+sdr.close()
