@@ -55,7 +55,7 @@ void loop() {
     tiempo_blink = millis();
     digitalWrite(led_blink.pin, led_blink.estado);
     led_blink.estado = ~led_blink.estado;
-//  enviarEstado()
+    //enviarEstado();
   }
 
   //Fines de carrera ficticios
@@ -95,15 +95,19 @@ void loop() {
   {
     if(accion != NULL)
     {
+      accion();
       espera_motores.estado = true;
       espera_motores.tiempo = millis();
-      accion();
     }
   }
 
   if(espera_motores.estado == true)
     if(millis() - espera_motores.tiempo > MILLIS_MOTORES)
-      espera_motores.estado = false;
+      {
+        espera_motores.estado = false;
+        //Aviso que ya termino la espera y estamos listos para un nuevo comando
+        Serial.println("<OK>");
+      }
 }
 /*############FIN DEL LOOP#############*/
 
@@ -252,7 +256,13 @@ void enviarEstado(void)
 {
   Serial.print("<S");
   Serial.print(posicion.elevacion, DEC);
+  Serial.print('@');
   Serial.print(posicion.azimut, DEC);
-  Serial.print(fin_carrera.derecha << 3 | fin_carrera.izquierda << 2 | fin_carrera.inferior << 1 | fin_carrera.superior << 0);
+  Serial.print('@');
+  Serial.print(fin_carrera.derecha, BIN);
+  Serial.print(fin_carrera.izquierda, BIN);
+  Serial.print(fin_carrera.inferior, BIN);
+  Serial.print(fin_carrera.superior, BIN);
+  //Serial.print((char)(fin_carrera.derecha << 3 | fin_carrera.izquierda << 2 | fin_carrera.inferior << 1 | fin_carrera.superior << 0));
   Serial.println('>');
 }
