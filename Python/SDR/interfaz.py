@@ -17,7 +17,8 @@ def imprimir_menu():
     print('3) Leer potencia actual')
     print('4) Mapear')
     print('5) Resetear Arduino')
-    print('6) Salir')
+    print('6) Busqueda manual')
+    print('7) Salir')
     try:
         entrada = int(input('Ingrese una accion: '))
     except:
@@ -101,5 +102,7 @@ def mapa_de_potencia(data, ax=None,
     ax.set_yticks(np.arange(data.shape[0]+1)-.5, minor=True)
     #ax.grid(which="minor", color="w", linestyle='-', linewidth=3)
     ax.tick_params(which="minor", bottom=False, left=False)
+    
+    #plt.cla()
 
     return im, cbar

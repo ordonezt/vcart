@@ -27,7 +27,7 @@ class Sdr():
         
         #Lo configuro
         self.dispositivo.sample_rate = 2.048e6 #Hz
-        self.dispositivo.center_freq = 433.83e6  #Hz
+        self.dispositivo.center_freq = 1e9  #Hz
         self.dispositivo.freq_correction = 60 #ppm
         self.dispositivo.gain = 49.6 #dB
         self.dispositivo.set_agc_mode(False)

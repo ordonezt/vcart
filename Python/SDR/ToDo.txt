@@ -8,4 +8,6 @@ Created on Wed Aug  5 17:34:01 2020
 
 Mejorar las capas interfaz / controladores
 Hacer funcion main
+Arreglar el tema de las fotos y varios mapeos
+Hacer SunFinder
 

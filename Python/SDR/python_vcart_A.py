@@ -14,6 +14,7 @@ import sys
 import interfaz
 import arduino_controlador as ard
 import sdr_controlador as sdrcon
+import sonido
 
 
 def terminar_programa(signal_number=None, frame=None):
@@ -78,8 +79,13 @@ def mapear():
     
     print('Graficando...')
     im, cbar = interfaz.mapa_de_potencia(mapa_potencia)
-    im.figure.savefig('mapa_potencia', format='png')
-    print('Imagen guardada como "mapa_potencia.png"')
+    
+    nombre =    'mapa_potencia_' + \
+                str(sdrcon.sdr.dispositivo.center_freq/1e9) + 'GHz_' + \
+                str(rango_elevacion) + 'x' + str(rango_azimut)
+    formato = 'png'
+    im.figure.savefig(fname=nombre, format=formato)
+    print('Imagen guardada como "{}.{}"'.format(nombre, formato))
     print('Listo\n\n')
 
 def leer_potencia_actual():
@@ -88,6 +94,7 @@ def leer_potencia_actual():
     potencia = sdrcon.sdr.leer_potencia()
     print('Potencia: {:2.2f}dB'. format(potencia))
     print('Listo\n\n')
+
     
 #Asocio la señal de interrupcion de teclado a un handler para terminar el script
 syssig.signal(syssig.SIGINT, terminar_programa)
@@ -124,8 +131,11 @@ while True:
 
     elif entrada == 5:
         ard.arduino.reset()        
-        
+     
     elif entrada == 6:
+        sonido.busqueda_manual()
+        
+    elif entrada == 7:
         terminar_programa()
     
     else:
