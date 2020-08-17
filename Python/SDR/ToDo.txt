@@ -8,6 +8,12 @@ Created on Wed Aug  5 17:34:01 2020
 
 Mejorar las capas interfaz / controladores
 Hacer funcion main
-Arreglar el tema de las fotos y varios mapeos
+
 Hacer SunFinder
 
+Graficos:
+	Arreglar el tema de las fotos y varios mapeos
+	Arreglar extension .png
+	Girar el grafico
+	Dar la opcion de elegir nombre de foto
+	Que el color sea FIJO y corresponda a cada potencia, si no esta cambiando todo el tiempo y es confuso
