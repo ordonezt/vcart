@@ -1,0 +1,395 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+*{
+    margin: 0;
+}
+body {
+    position: relative;
+    margin: 0;
+  }
+
+/* Header y menu de navegacion */
+header, footer{
+    background-color: rgba(98, 98, 98, 1);
+    color: white;
+    /*border-radius: 20px;*/
+    font-family: "Montserrat", sans-serif;
+    text-align: center;
+    width: 100%;
+}
+
+header{
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    height: 80px;
+}
+
+
+footer{
+    position: absolute;
+    bottom: 0;
+    margin-top: -6rem;
+    clear: both;
+}
+
+/*Icono de inicio*/
+.barra-menu{
+    background-color: rgba(98, 98, 98, 1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 10%;
+}
+
+.menu_bar_btn{
+    display: none;
+}
+
+.logo-nombre a{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+}
+.logo-nombre h2{
+    display: inline-block;
+}
+
+.logo{
+    width: 50px;
+}
+/*Fin de icono de inicio*/
+
+
+.link_nav  li{
+    display: inline-block;
+    text-decoration: none;
+    
+    /*border: 1px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 50px;*/
+    padding: 5px;
+}
+
+.link_nav  li a{
+    text-decoration: none;
+    
+    color: white;
+}
+
+.barra-menu a button{
+    padding: 9px 25px;
+    background-color: rgba(0,136,169,1);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+/* Fin de header y menu de navegacion */
+
+.footer_link{
+    color: white;
+    text-decoration: none;
+}
+
+
+/* Body */
+main{
+    font-family: "Open Sans", sans-serif;
+    background-color: lightslategrey;
+    color: white;
+    padding-bottom: 30px;
+    margin: 0;
+    margin-top: 30px;
+    position: relative;
+    min-height: 78.3vh;
+    padding-bottom: 6rem;
+}
+
+h1{
+    text-align: center;
+}
+
+h2{
+    text-align: center;
+}
+
+.introduccion {
+    position: relative;
+    display: block;
+}
+
+
+/* .introduccion .contenedor-foto{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+} */
+
+.introduccion img{
+    position: relative;
+    bottom: 0;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@keyframes xAxis {
+    50% {
+        animation-timing-function: linear;
+        transform: translateX(100vw);
+    }
+}
+
+@keyframes yAxis {
+    50% {
+        animation-timing-function: linear;
+        transform: translateY(800px);
+    }
+}
+
+#luna{
+    position: absolute;
+    top: -90%;
+    width: 5%;
+    z-index: 2;
+    animation: xAxis 150s infinite linear;
+}
+#luna::after {
+    /* Render dot */
+    animation: yAxis 2.5s infinite linear;
+}
+
+
+
+/* .introduccion .texto-introduccion{
+    padding-top: 5%;
+    position: absolute;
+    display: flex;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+    z-index: 3;
+    font-size: larger;
+}
+
+.introduccion .texto-introduccion p{
+    width: 80vw;
+    padding-top: 1%;
+} */
+.introduccion .texto-introduccion h1{
+    padding-top: 5%;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    z-index: 3;
+    font-size: 2em;
+    font-weight: bold;
+    font-family: 'Press Start 2P', cursive;
+    color: rgb(220, 116, 19);
+}
+
+.introduccion .texto-introduccion p{
+    width: 100%;
+    top: 0;
+    margin-top: 20%;
+    position: absolute;
+    text-align: center;
+    z-index: 3;
+    font-size: larger;
+}
+
+@media screen and (max-width: 700px){
+    header{
+        width: 40%;
+        height: 100%;
+    }
+    .menu_bar_btn{
+        display: block;
+        width: 100vw;
+        background-color: #ccc;
+    }
+    .menu_bar_btn .bt-menu{
+        display: block;
+        padding: 20px;
+        background: #cFF;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    .menu_bar_btn .bt-menu i{
+        float: right;
+    }
+    .barra-menu{
+        width: 40%;
+        height: 100%;
+        position: fixed;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: left;
+        left: -100vw;
+    }
+    .logo-nombre a{
+        flex-direction: column;
+    }
+    .link_nav{
+        padding: 0;
+        text-align: left;
+    }
+    .link_nav  li{
+        display: block;
+        padding: 2vh 0 2vh 0;
+    }
+    main > article > img{
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 700px){
+    .introduccion .texto-introduccion h1{
+        padding-top: 20%;
+    }
+    
+    .introduccion .texto-introduccion p{        
+        position: static;
+        font-size: larger;
+        text-align: justify;
+        width: 80vw;
+        margin: auto;
+    }
+}
+
+main > article > h3{
+    text-align: center;
+    margin-top: 2%;
+    font-size: x-large;
+    color: rgb(0, 30, 95);
+}
+
+main > article > p{
+    text-align: justify;
+    width: 80vw;
+    margin: auto;
+}
+
+main > article > img{
+    display: block;
+    margin: auto;
+    /* width: 90%; */
+}
+
+.lista-creadores{
+    display: table;
+    list-style: inside;
+    margin: 0 auto;
+}
+
+/*footer{
+    text-align: center;
+    margin-top: 10px;
+
+    background-color: rgba(98, 98, 98, 0.8);
+    color: white;
+    border-radius: 20px;
+    font-family: "Montserrat", sans-serif;
+}*/
+
+
+a:hover{
+    color:teal !important;
+}
+
+.localizaciones{
+    display: flex;
+    justify-content: space-around;
+}
+
+h4{
+    text-align: center;
+}
+
+.listado-partes{
+    display: flex;
+    justify-content: space-around;
+}
+
+.listado-partes h3{
+    text-align: center;
+    color: black;
+}
+
+.listado-partes tr:hover{
+    background-color: rgb(127, 151, 187)
+}
+
+.listado-partes th{
+    color: black;
+}
+.listado-partes table, .listado-partes th, .listado-partes td{
+    border: solid rgba(98, 98, 98, 1);;
+    border-collapse: collapse;
+}
+
+.listado-partes a{
+    text-decoration: none;
+    color: white;
+}
+
+div.contenedor-galeria{
+    display: flex;
+    justify-content: center;
+}
+
+div.gallery {
+  margin: 5px;
+  border: 1px solid #ccc;
+  float: left;
+  width: 400px;
+}
+
+div.gallery:hover {
+  border: 1px solid #777;
+}
+
+div.gallery img {
+  width: 100%;
+  height: auto;
+}
+
+div.desc {
+  padding: 15px;
+  text-align: center;
+}
+
+h3{
+    text-align: center;
+}
+
+form{
+    border: 1px solid black;
+    display: inline-block;
+    text-align: left;
+    margin-top: 8px;
+}
+
+div.contenedor-boton{
+    text-align: center;
+}
+
+.contenedor-form{
+    text-align: center;
+}

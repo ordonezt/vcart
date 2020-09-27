@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link rel="shortcut icon" href="img/radio_telescopio_icono.png" type="image/x-icon">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="js/menu.js"></script>
+    <title>Pedidos</title>
+</head>
+<body>
+    
+    <header>
+        <div class="menu_bar_btn">
+			<a href="#" class="bt-menu"><i class="fas fa-bars"></i>Menu</a>
+		</div>
+        <nav class="barra-menu">
+            <div class="logo-nombre">
+                <a href="index.html">
+                    <img class="logo" src="img/radio_telescopio_icono.png" alt="Logo">
+                    <h2>VCART</h1>
+                </a>
+            </div>
+            <ul class="link_nav">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="capturas.html">Capturas</a></li>
+                <li><a href="partes.html">Partes</a></li>
+                <li><a href="puntos.html">Puntos de prueba</a></li>
+                <li><a href="pedidos.html">Pedidos</a></li>
+            </ul>
+            <a href="contacto.html"><button>Contacto</button></a>
+        </nav>
+    </header>
+    
+    <main>
+        <h2>Pedidos</h2>
+        <h3>Para recibir su kit completo de VCART complete el formulario</h3>
+        <div class="contenedor-form">
+            <form>
+                <label for="nombres">Nombres:</label><br>
+                <input type="text" id="nombres" name="nombres" placeholder="Ingrese su nombre"><br>
+                <label for="apellido">Apellido:</label><br>
+                <input type="text" id="apellido" name="apellido" placeholder="Ingrese su apellido"><br><br>
+    
+                <label for="direccion">Direccion:</label><br>
+                <input type="text" id="direccion" placeholder="Ingrese su direccion"><br>
+                <label for="codigo_postal">Codigo postal:</label><br>
+                <input type="text" name="codigo_postal" id="codigo_postal" placeholder="Ingrese su codigo postal"><br><br>
+    
+                <label for="pedido">Parte/s que desea:</label><br>
+                <input type="checkbox" id="parte1" name="parte1" value="Electrónica">
+                <label for="parte1"> Electrónica</label><br>
+                <input type="checkbox" id="parte2" name="parte2" value="Mecanica">
+                <label for="parte2"> Mecánica</label><br>
+                <input type="checkbox" id="parte3" name="parte3" value="Software">
+                <label for="parte3"> Software</label><br><br>
+    
+                <div class="contenedor-boton">    
+                    <input type="submit" value="Enviar">
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>Proyecto aun en desarrollo</p>
+        <a class="footer_link" href="https://github.com/ordonezt/vcart" target="_blank"><i class="fab fa-github">Github</i></a>
+    </footer>
+</body>
+</html>
