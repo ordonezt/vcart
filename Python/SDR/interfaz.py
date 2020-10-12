@@ -18,13 +18,33 @@ def imprimir_menu():
     print('4) Mapear')
     print('5) Resetear Arduino')
     print('6) Busqueda manual')
-    print('7) Salir')
+    print('7) Configurar SDR')
+    print('8) Salir')
     try:
         entrada = int(input('Ingrese una accion: '))
     except:
         entrada = -1
     
     return entrada
+
+def imprimir_menu_configuracion():
+    print('\n')
+    print('Configurar SDR:')
+    print('---------------\n')
+    print('1) Frecuencia central')
+    print('2) Ancho de banda')
+    print('3) Ganancia')
+    print('4) Cantidad de muestras por medicion')
+    print('5) Leer configuracion actual')
+    print('6) Salir')
+    try:
+        entrada = int(input('Ingrese una accion: '))
+    except:
+        entrada = -1
+    
+    return entrada
+
+
 
 def orden_no_valida():
     print('Orden no valida')
@@ -46,7 +66,7 @@ def imprimir_menu_mapear():
     return rango_elevacion, rango_azimut
     
 def mapa_de_potencia(data, ax=None,
-            cbar_kw={}, cbarlabel="", **kwargs):
+            cbar_kw={}, title="", **kwargs):
     """
     Create a heatmap from a numpy array and two lists of labels.
 
@@ -68,16 +88,28 @@ def mapa_de_potencia(data, ax=None,
     **kwargs
         All other arguments are forwarded to `imshow`.
     """
-
+    cbarlabel = 'Potencia [dBm]'
+    
+    # vmin = -66#dB
+    # vmax = -54#dB
+    # vmax = 10
+    # vmin = -100000
+    
+    # if (data.any() > vmax) or (data.any() < vmin):
+    #     vmax = None
+    #     vmin = None
+    
     if not ax:
-        ax = plt.gca()
+        fig = plt.figure()
+        ax = plt.axes()
+        
 
     # Plot the heatmap
-    im = ax.imshow(data, **kwargs)
+    im = ax.imshow(data, vmin=None, vmax=None, origin='lower', **kwargs)
 
     # Create colorbar
     cbar = ax.figure.colorbar(im, ax=ax, **cbar_kw)
-    cbar.ax.set_ylabel(cbarlabel, rotation=-90, va="bottom")
+    cbar.ax.set_ylabel(cbarlabel, labelpad=20, va="bottom")
 
     # We want to show all ticks...
     ax.set_xticks(np.arange(data.shape[1]))
@@ -87,8 +119,8 @@ def mapa_de_potencia(data, ax=None,
     # ax.set_yticklabels(row_labels)
 
     # Let the horizontal axes labeling appear on top.
-    ax.tick_params(top=True, bottom=False,
-                   labeltop=True, labelbottom=False)
+    ax.tick_params(top=False, bottom=True,
+                   labeltop=False, labelbottom=True)
 
     # Rotate the tick labels and set their alignment.
     # plt.setp(ax.get_xticklabels(), rotation=-30, ha="right",
@@ -103,6 +135,12 @@ def mapa_de_potencia(data, ax=None,
     #ax.grid(which="minor", color="w", linestyle='-', linewidth=3)
     ax.tick_params(which="minor", bottom=False, left=False)
     
+    ax.set_ylabel('Elevacion')
+    ax.set_xlabel('Azimut')
+    
     #plt.cla()
-
+    ax.set_title(title)
+    
+    fig.show()
+    
     return im, cbar

@@ -35,7 +35,7 @@ def terminar_programa(signal_number=None, frame=None):
 def mapear():
     rango_elevacion, rango_azimut = interfaz.imprimir_menu_mapear()
     
-    mapa_potencia = np.zeros((rango_azimut, rango_elevacion))
+    mapa_potencia = np.zeros((rango_elevacion, rango_azimut))
     
     for paso_azimut in range(rango_azimut):
         if paso_azimut % 2 == 0:
@@ -44,9 +44,9 @@ def mapear():
                 #Calculo la potencia de la señal
                 potencia = sdrcon.sdr.leer_potencia()
                 
-                mapa_potencia[paso_azimut, paso_elevacion] = potencia
+                mapa_potencia[paso_elevacion, paso_azimut] = potencia
                 
-                print('Elevacion: {}, Azimut: {}, Potencia: {:2.2f}dB'. format(paso_elevacion, paso_azimut, potencia))
+                print('Elevacion: {}, Azimut: {}, Potencia: {:2.2f}dBm'. format(paso_elevacion, paso_azimut, potencia))
                 
                 ard.arduino.enviar_trama('<U>')
                 
@@ -60,9 +60,9 @@ def mapear():
                 #Calculo la potencia de la señal
                 potencia = sdrcon.sdr.leer_potencia()
                 
-                mapa_potencia[paso_azimut, paso_elevacion] = potencia
+                mapa_potencia[paso_elevacion, paso_azimut] = potencia
                 
-                print('Elevacion: {}, Azimut: {}, Potencia: {:2.2f}dB'. format(paso_elevacion, paso_azimut, potencia))
+                print('Elevacion: {}, Azimut: {}, Potencia: {:2.2f}dBm'. format(paso_elevacion, paso_azimut, potencia))
                 
                 ard.arduino.enviar_trama('<D>')
                 
@@ -78,21 +78,21 @@ def mapear():
         ard.arduino.flag_paso_realizado = False
     
     print('Graficando...')
-    im, cbar = interfaz.mapa_de_potencia(mapa_potencia)
+    titulo =    'Mapa de potencia ' + \
+                str(sdrcon.sdr.get_frecuencia_central()/1e9) + 'GHz'
+    im, cbar = interfaz.mapa_de_potencia(mapa_potencia,  title=titulo)
     
-    nombre =    'mapa_potencia_' + \
-                str(sdrcon.sdr.dispositivo.center_freq/1e9) + 'GHz_' + \
-                str(rango_elevacion) + 'x' + str(rango_azimut)
+    nombre_archivo = input('Ingrese un nombre para la imagen: ')
     formato = 'png'
-    im.figure.savefig(fname=nombre, format=formato)
-    print('Imagen guardada como "{}.{}"'.format(nombre, formato))
+    im.figure.savefig(fname=nombre_archivo, format=formato)
+    print('Imagen guardada como "{}.{}"'.format(nombre_archivo, formato))
     print('Listo\n\n')
 
 def leer_potencia_actual():
     print('\n\nLeer potencia actual')
     print('--------------------------\n')
     potencia = sdrcon.sdr.leer_potencia()
-    print('Potencia: {:2.2f}dB'. format(potencia))
+    print('Potencia: {:2.2f}dBm'. format(potencia))
     print('Listo\n\n')
 
     
@@ -136,8 +136,11 @@ while True:
         sonido.busqueda_manual()
         
     elif entrada == 7:
-        terminar_programa()
+        sdrcon.sdr.configurar()
     
+    elif entrada == 8:
+        terminar_programa()
+        
     else:
         interfaz.orden_no_valida()
 

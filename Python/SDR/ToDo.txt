@@ -8,13 +8,24 @@ Created on Wed Aug  5 17:34:01 2020
 
 1) Hacer funcion main
 2) Hacer el SDR configurable (Frecuencia central considerando conversion del LNB)
+    a) Ponerle la coma en las ganancias que me entrega el dispositivo (dividir todo por 10)
 3) Mejorar las capas interfaz / controladores
 4) Usar la version de Meghi para la busqueda manual
 5) Corregir graficos
 
 Graficos:
 	Arreglar el tema de las fotos y varios mapeos
+        LISTO
+	
 	Arreglar extension .png
-	Girar el grafico
+    	QUE HABIA QUE HACER? ANDA BIEN
+	
+	Girar el graficos
+    	LISTO
+	
 	Dar la opcion de elegir nombre de foto
+    	LISTO
+	
 	Que el color sea FIJO y corresponda a cada potencia, si no esta cambiando todo el tiempo y es confuso
+    	LISTO, RANGO DE -54 A -66 dB, SI SALE DE RANGO ES AUTOMATICO 
+6) Revisar los valores de Vref y Zo
