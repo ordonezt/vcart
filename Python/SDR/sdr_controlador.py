@@ -17,9 +17,9 @@ def inicializar_sdr():
 def calcular_potencia(X, Vref, Zo):  
     
     N = len(X)
-    potencia = (Vref ** 2 / (N * Zo)) * (sum(abs(X[n]) ** 2)  for n in range(N))
+    potencia = (1 / N) * (sum(abs(X[n]) ** 2)  for n in range(N))
 
-    return 10 * np.log10(potencia)
+    return 10 * np.log10(potencia) #dBFS
 
 class Sdr():
     

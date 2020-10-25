@@ -88,7 +88,7 @@ def mapa_de_potencia(data, ax=None,
     **kwargs
         All other arguments are forwarded to `imshow`.
     """
-    cbarlabel = 'Potencia [dBm]'
+    cbarlabel = 'Potencia [dBFS]'
     
     # vmin = -66#dB
     # vmax = -54#dB
@@ -106,6 +106,9 @@ def mapa_de_potencia(data, ax=None,
 
     # Plot the heatmap
     im = ax.imshow(data, vmin=None, vmax=None, origin='lower', **kwargs)
+    
+    # # Plot the heatmap
+    # im = ax.imshow(data, interpolation='lanczos', vmin=None, vmax=None, origin='lower', **kwargs)
 
     # Create colorbar
     cbar = ax.figure.colorbar(im, ax=ax, **cbar_kw)

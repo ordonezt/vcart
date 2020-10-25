@@ -46,7 +46,7 @@ def mapear():
                 
                 mapa_potencia[paso_elevacion, paso_azimut] = potencia
                 
-                print('Elevacion: {}, Azimut: {}, Potencia: {:2.2f}dBm'. format(paso_elevacion, paso_azimut, potencia))
+                print('Elevacion: {}, Azimut: {}, Potencia: {:2.2f}dBFS'. format(paso_elevacion, paso_azimut, potencia))
                 
                 ard.arduino.enviar_trama('<U>')
                 
@@ -62,7 +62,7 @@ def mapear():
                 
                 mapa_potencia[paso_elevacion, paso_azimut] = potencia
                 
-                print('Elevacion: {}, Azimut: {}, Potencia: {:2.2f}dBm'. format(paso_elevacion, paso_azimut, potencia))
+                print('Elevacion: {}, Azimut: {}, Potencia: {:2.2f}dBFS'. format(paso_elevacion, paso_azimut, potencia))
                 
                 ard.arduino.enviar_trama('<D>')
                 
@@ -92,7 +92,7 @@ def leer_potencia_actual():
     print('\n\nLeer potencia actual')
     print('--------------------------\n')
     potencia = sdrcon.sdr.leer_potencia()
-    print('Potencia: {:2.2f}dBm'. format(potencia))
+    print('Potencia: {:2.2f}dBFS'. format(potencia))
     print('Listo\n\n')
 
     
