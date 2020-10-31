@@ -16,6 +16,7 @@ import arduino_controlador as ard
 import sdr_controlador as sdrcon
 import sonido
 
+# mapa_potencia = 0
 
 def terminar_programa(signal_number=None, frame=None):
     print('\n\nCerrando...')
@@ -24,6 +25,19 @@ def terminar_programa(signal_number=None, frame=None):
     #         sdr.close()
     # except:
     #     pass
+    # global mapa_potencia
+    
+    # print('Graficando...')
+    # titulo =    'Mapa de potencia ' + \
+    #             str(sdrcon.sdr.get_frecuencia_central()/1e9) + 'GHz'
+    # im, cbar = interfaz.mapa_de_potencia(mapa_potencia,  title=titulo)
+    
+    # nombre_archivo = 'Ultimo Mapeo'
+    # formato = 'png'
+    # im.figure.savefig(fname=nombre_archivo, format=formato)
+    # print('Imagen guardada como "{}.{}"'.format(nombre_archivo, formato))
+    # print('Listo\n\n')
+    
     sdrcon.sdr.cerrar()
     # if hilo_uart.is_alive():
     #     hilo_uart.close()
@@ -33,66 +47,72 @@ def terminar_programa(signal_number=None, frame=None):
     sys.exit()
 
 def mapear():
-    rango_elevacion, rango_azimut = interfaz.imprimir_menu_mapear()
     
-    mapa_potencia = np.zeros((rango_elevacion, rango_azimut))
-    
-    for paso_azimut in range(rango_azimut):
-        if paso_azimut % 2 == 0:
-            for paso_elevacion in range(rango_elevacion):
-                #Medir potencia aca y avanzar paso
-                #Calculo la potencia de la señal
-                potencia = sdrcon.sdr.leer_potencia()
-                
-                mapa_potencia[paso_elevacion, paso_azimut] = potencia
-                
-                print('Elevacion: {}, Azimut: {}, Potencia: {:2.2f}dBFS'. format(paso_elevacion, paso_azimut, potencia))
-                
-                ard.arduino.enviar_trama('<U>')
-                
-                while ard.arduino.flag_paso_realizado != True:
-                    pass
-                ard.arduino.flag_paso_realizado = False
+    if sdrcon.sdr.esta_calibrado() == True:
         
-        else:
-            for paso_elevacion in range(rango_elevacion - 1, 0 - 1, -1):
-                #Medir potencia aca y avanzar paso
-                #Calculo la potencia de la señal
-                potencia = sdrcon.sdr.leer_potencia()
-                
-                mapa_potencia[paso_elevacion, paso_azimut] = potencia
-                
-                print('Elevacion: {}, Azimut: {}, Potencia: {:2.2f}dBFS'. format(paso_elevacion, paso_azimut, potencia))
-                
-                ard.arduino.enviar_trama('<D>')
-                
-                while ard.arduino.flag_paso_realizado != True:
-                    pass
-                ard.arduino.flag_paso_realizado = False
+        rango_elevacion, rango_azimut = interfaz.imprimir_menu_mapear()
         
-        #Me corro hacia izquierda
-        ard.arduino.enviar_trama('<L>')
+        mapa_potencia = np.zeros((rango_elevacion, rango_azimut))
         
-        while ard.arduino.flag_paso_realizado != True:
-            pass
-        ard.arduino.flag_paso_realizado = False
+        for paso_azimut in range(rango_azimut):
+            if paso_azimut % 2 == 0:
+                for paso_elevacion in range(rango_elevacion):
+                    #Medir potencia aca y avanzar paso
+                    #Calculo la potencia de la señal
+                    potencia = sdrcon.sdr.leer_potencia_calibrada()
+                    
+                    mapa_potencia[paso_elevacion, paso_azimut] = potencia
+                    
+                    print('Elevacion: {}, Azimut: {}, Potencia: {:2.2f} dB'. format(paso_elevacion, paso_azimut, potencia))
+                    #ARRIBA
+                    ard.arduino.enviar_trama('3 1 10')
+                    
+                    while ard.arduino.flag_paso_realizado != True:
+                        pass
+                    ard.arduino.flag_paso_realizado = False
+            
+            else:
+                for paso_elevacion in range(rango_elevacion - 1, 0 - 1, -1):
+                    #Medir potencia aca y avanzar paso
+                    #Calculo la potencia de la señal
+                    potencia = sdrcon.sdr.leer_potencia_calibrada()
+                    
+                    mapa_potencia[paso_elevacion, paso_azimut] = potencia
+                    
+                    print('Elevacion: {}, Azimut: {}, Potencia: {:2.2f} dB'. format(paso_elevacion, paso_azimut, potencia))
+                    #ABAJO
+                    ard.arduino.enviar_trama('3 0 10')
+                    
+                    while ard.arduino.flag_paso_realizado != True:
+                        pass
+                    ard.arduino.flag_paso_realizado = False
+            
+            #Me corro hacia izquierda
+            ard.arduino.enviar_trama('1 1 20')
+            
+            while ard.arduino.flag_paso_realizado != True:
+                pass
+            ard.arduino.flag_paso_realizado = False
+        
+        print('Graficando...')
+        titulo =    'Mapa de potencia ' + \
+                    str(sdrcon.sdr.get_frecuencia_central()/1e9) + 'GHz'
+        im, cbar = interfaz.mapa_de_potencia(mapa_potencia,  title=titulo)
+        
+        nombre_archivo = input('Ingrese un nombre para la imagen: ')
+        formato = 'png'
+        im.figure.savefig(fname=nombre_archivo, format=formato)
+        print('Imagen guardada como "{}.{}"'.format(nombre_archivo, formato))
+        print('Listo\n\n')
     
-    print('Graficando...')
-    titulo =    'Mapa de potencia ' + \
-                str(sdrcon.sdr.get_frecuencia_central()/1e9) + 'GHz'
-    im, cbar = interfaz.mapa_de_potencia(mapa_potencia,  title=titulo)
-    
-    nombre_archivo = input('Ingrese un nombre para la imagen: ')
-    formato = 'png'
-    im.figure.savefig(fname=nombre_archivo, format=formato)
-    print('Imagen guardada como "{}.{}"'.format(nombre_archivo, formato))
-    print('Listo\n\n')
+    else:
+        print('No esta calibrado')
 
 def leer_potencia_actual():
     print('\n\nLeer potencia actual')
     print('--------------------------\n')
     potencia = sdrcon.sdr.leer_potencia()
-    print('Potencia: {:2.2f}dBFS'. format(potencia))
+    print('Potencia: {:2.2f} dBFS'. format(potencia))
     print('Listo\n\n')
 
     
@@ -137,8 +157,11 @@ while True:
         
     elif entrada == 7:
         sdrcon.sdr.configurar()
-    
+        
     elif entrada == 8:
+        sdrcon.sdr.calibrar()
+    
+    elif entrada == 9:
         terminar_programa()
         
     else:

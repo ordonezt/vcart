@@ -17,7 +17,7 @@ def inicializar_sdr():
 def calcular_potencia(X, Vref, Zo):  
     
     N = len(X)
-    potencia = (1 / N) * (sum(abs(X[n]) ** 2)  for n in range(N))
+    potencia = (1 / N) * (sum(abs(X[n]) ** 2  for n in range(N)))
 
     return 10 * np.log10(potencia) #dBFS
 
@@ -45,6 +45,8 @@ class Sdr():
         self.Vref = 1#V
         self.Zo = 2e3#Ohm
         
+        self.potencia_calibrada = None
+        
     def leer_potencia(self):
         #Leo las muestras
         iq = self.dispositivo.read_samples(self.n * self.nfft)
@@ -52,6 +54,24 @@ class Sdr():
         potencia = calcular_potencia(iq, self.Vref, self.Zo) - self.dispositivo.gain
         
         return potencia
+    
+    def leer_potencia_calibrada(self):
+        if self.esta_calibrado() == True:
+            return self.leer_potencia() - self.potencia_calibrada
+        else:
+            return None
+    
+    def calibrar(self):
+        print('Calibrando...')
+        potencia_aux = 0
+        for i in range(10):
+            potencia_aux += self.leer_potencia()
+            
+        self.potencia_calibrada = potencia_aux / (i + 1)   
+        print('Calibrado a {:2.2f} dBFS'.format(self.potencia_calibrada))
+    
+    def esta_calibrado(self):
+        return self.potencia_calibrada != None
     
     def configurar(self):
         entrada = 0
