@@ -20,7 +20,8 @@ def imprimir_menu():
     print('6) Busqueda manual')
     print('7) Configurar SDR')
     print('8) Calibrar')
-    print('9) Salir')
+    print('9) Mover motores')
+    print('10) Salir')
     try:
         entrada = int(input('Ingrese una accion: '))
     except:
@@ -89,7 +90,7 @@ def mapa_de_potencia(data, ax=None,
     **kwargs
         All other arguments are forwarded to `imshow`.
     """
-    cbarlabel = 'Potencia normalizada[dB]'
+    cbarlabel = 'Potencia absoluta[dBFS]'
     
     # vmin = -66#dB
     # vmax = -54#dB
