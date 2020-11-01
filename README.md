@@ -3,17 +3,17 @@ _VCART (Very Cheap Argentinian Radio Telescope) esta basado en el proyecto "Mini
 
 ## Componentes
 * Antena parabolica (con LNB)
-* Arduino Nano
+* Arduino Mega + Shield Ramps
 * RTL-SDR
 * Motores paso a paso
 
 
 ## Capturas
-![Captura1](https://github.com/ordonezt/vcart/blob/master/Capturas/editado_mapa_potencia_1.0GHz_20x10_SOL.png)
-![Captura2](https://github.com/ordonezt/vcart/blob/master/Capturas/editado_mapa_potencia_1.0GHz_20x20_sol_en_la_punta.png)
-![Captura3](https://github.com/ordonezt/vcart/blob/master/Capturas/editado_mapa_potencia_1.0GHz_20x10_SATELITE.png)
+![Captura1](https://github.com/ordonezt/vcart/blob/master/Capturas/luna.png)
+![Captura2](https://github.com/ordonezt/vcart/blob/master/Capturas/satelite_1.png)
+![Captura3](https://github.com/ordonezt/vcart/blob/master/Capturas/satelite_2.png)
 
 
 ## Codigo
 * El script de Python es [python_vcart_A.py](https://github.com/ordonezt/vcart/blob/develop/Python/SDR/python_vcart_A.py)
-* El programa del Arduino es [arduino_vcart_A.ino](https://github.com/ordonezt/vcart/blob/develop/Arduino/arduino_vcart_A/arduino_vcart_A.ino)
+* El programa del Arduino es [Motores_Serial.ino](https://github.com/ordonezt/vcart/blob/develop/Arduino/Motores_Serial/Motores_Serial.ino)
