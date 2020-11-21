@@ -24,6 +24,8 @@
 #define Q_DIR_PIN 34
 #define Q_ENABLE_PIN 30
 
+#define DELAY_PASO  40
+
 char vectorChar[3];
 void setup() {
   // put your setup code here, to run once:
@@ -74,7 +76,7 @@ int n=atoi(vectorChar);
     for(int a=0; a<n;a++){
   digitalWrite(X_STEP_PIN , HIGH);
   //Serial.print("va")
-  delay(80);
+  delay(DELAY_PASO);
   digitalWrite(X_STEP_PIN , LOW);
     }
     Serial.println("<OK>");
@@ -92,7 +94,7 @@ int n=atoi(vectorChar);
    for(int a=0; a<n;a++){
   digitalWrite(E_STEP_PIN , HIGH);
   digitalWrite(Z_STEP_PIN , HIGH);
-  delay(80);
+  delay(DELAY_PASO);
   digitalWrite(E_STEP_PIN , LOW);
   digitalWrite(Z_STEP_PIN , LOW);
     }
@@ -108,7 +110,7 @@ int n=atoi(vectorChar);
    }
    for(int a=0; a<n;a++){
   digitalWrite(Y_STEP_PIN , HIGH);
-  delay(80);
+  delay(DELAY_PASO);
   digitalWrite(Y_STEP_PIN , LOW);
       }
       Serial.println("<OK>");
